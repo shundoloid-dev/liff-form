@@ -25,11 +25,10 @@
 <h2>住宅ローン診断</h2>
 
 <input id="rate" placeholder="金利（%）">
-<input id="years" placeholder="残年数">
+<input id="months" placeholder="残年数（ヶ月）">
 <input id="loan" placeholder="住宅ローン残高">
-<input id="solar" placeholder="太陽光ローン">
-<input id="battery" placeholder="蓄電池ローン">
-<input id="other" placeholder="その他">
+<input id="solar" placeholder="太陽光ローン残高">
+<input id="otherLoan" placeholder="蓄電池などその他ローン残高">
 <input id="newCost" placeholder="導入予定金額">
 
 <button onclick="send()">診断する</button>
@@ -38,18 +37,17 @@
 
 <script>
 async function send() {
-  await liff.init({ liffId: "ここにLIFF_ID" });
+  await liff.init({ liffId: "2009626975-Vz6EeQLF" });
 
   const profile = await liff.getProfile();
 
   const data = {
     userId: profile.userId,
     rate: document.getElementById("rate").value,
-    years: document.getElementById("years").value,
+    months: document.getElementById("months").value,
     loan: document.getElementById("loan").value,
     solar: document.getElementById("solar").value,
-    battery: document.getElementById("battery").value,
-    other: document.getElementById("other").value,
+    otherLoan: document.getElementById("otherLoan").value,
     newCost: document.getElementById("newCost").value
   };
 

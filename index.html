@@ -51,7 +51,7 @@ async function send() {
     newCost: document.getElementById("newCost").value
   };
 
-  await fetch("ここにGAS_URL", {
+  await fetch("https://script.google.com/macros/s/AKfycbwhPuNBi_V1w4gdD35aP-Z9CjtymYmMpGZsIhvms9N5cMowpzljRAFj6Shkt9d9C1ql/exec", {
     method: "POST",
     body: JSON.stringify(data)
   });

@@ -8,7 +8,7 @@
   <style>
     body { font-family: sans-serif; padding: 20px; }
     input { width: 100%; margin-bottom: 10px; padding: 8px; }
-    button { padding: 10px 20px; font-size: 16px; }
+    button { padding: 12px 20px; font-size: 16px; width: 100%; }
   </style>
 </head>
 <body>
@@ -25,10 +25,13 @@
   <button id="sendBtn">診断結果を送信</button>
 
   <script>
-    // 最新デプロイ済みのGAS URL
-    const GAS_URL = "https://script.google.com/macros/s/AKfycbygytzmO24zB8PMSuIM7nofvloKjux63KlDV-v8mwt9UYu4VluCjrTaUDBvZA84aVP7/exec";
+    // 最新GAS URL（必ず最新にする）
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyNKsyaKkNxgJlMmAw3zwKYt5KyUEg3N8P8LJzMukqkIEzYKREcDieNSKtB-V1zzsbC/exec";
 
     async function sendData() {
+      // 🔥 最強チェック（反映確認）
+      alert("最新版です");
+
       const data = {
         rate: document.getElementById("rate").value,
         months: document.getElementById("months").value,
@@ -39,21 +42,28 @@
         userId: liff.getContext().userId
       };
 
+      console.log("送信データ:", data);
+
       try {
         const res = await fetch(GAS_URL, {
           method: "POST",
           body: JSON.stringify(data),
-          headers: { "Content-Type": "application/json" }
+          headers: {
+            "Content-Type": "application/json"
+          }
         });
 
         const text = await res.text();
-        alert(text); // LINEに送信された結果の確認用（不要なら削除可）
+        alert("送信成功：" + text);
 
-        // 送信完了後にウィンドウを閉じる
-        liff.closeWindow();
+        // LIFFなら閉じる
+        if (liff.isInClient()) {
+          liff.closeWindow();
+        }
 
       } catch (err) {
         alert("送信エラー：" + err);
+        console.error(err);
       }
     }
 
@@ -61,7 +71,13 @@
 
     // LIFF初期化
     window.onload = () => {
-      liff.init({ liffId: "2009626975-Vz6EeQLF" });
+      liff.init({ liffId: "2009626975-Vz6EeQLF" })
+        .then(() => {
+          console.log("LIFF初期化成功");
+        })
+        .catch(err => {
+          console.error("LIFF初期化エラー", err);
+        });
     }
   </script>
 </body>

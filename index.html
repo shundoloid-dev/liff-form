@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>住宅ローン診断フォーム</title>
+  <script src="https://static.line-scdn.net/liff/edge/2.1/sdk.js"></script>
+  <style>
+    body { font-family: sans-serif; padding: 20px; }
+    input { width: 100%; margin-bottom: 10px; padding: 8px; }
+    button { padding: 10px 20px; font-size: 16px; }
+  </style>
+</head>
+<body>
+  <h2>住宅ローン診断フォーム</h2>
+  <p>必要事項を入力してください</p>
+
+  <input type="number" id="rate" placeholder="金利（%）" step="0.01" />
+  <input type="number" id="months" placeholder="残年数（ヶ月）" />
+  <input type="number" id="loan" placeholder="住宅ローン残高" />
+  <input type="number" id="solar" placeholder="太陽光ローン残高" />
+  <input type="number" id="otherLoan" placeholder="蓄電池などその他ローン残高" />
+  <input type="number" id="newCost" placeholder="導入予定金額" />
+
+  <button id="sendBtn">診断結果を送信</button>
+
+  <script>
+    // 最新デプロイ済みのGAS URL
+    const GAS_URL = "https://script.google.com/macros/s/AKfycbyRUy_hEibQVLj3eId0L4r7Z7HPW-RmmCTmkECS9ysAnRARkYptE1sknGgl4JyWa6hD/exec";
+
+    async function sendData() {
+      const data = {
+        rate: document.getElementById("rate").value,
+        months: document.getElementById("months").value,
+        loan: document.getElementById("loan").value,
+        solar: document.getElementById("solar").value,
+        otherLoan: document.getElementById("otherLoan").value,
+        newCost: document.getElementById("newCost").value,
+        userId: liff.getContext().userId
+      };
+
+      try {
+        const res = await fetch(GAS_URL, {
+          method: "POST",
+          body: JSON.stringify(data),
+          headers: { "Content-Type": "application/json" }
+        });
+
+        const text = await res.text();
+        alert(text); // LINEに送信された結果の確認用（不要なら削除可）
+
+        // 送信完了後にウィンドウを閉じる
+        liff.closeWindow();
+
+      } catch (err) {
+        alert("送信エラー：" + err);
+      }
+    }
+
+    document.getElementById("sendBtn").addEventListener("click", sendData);
+
+    // LIFF初期化
+    window.onload = () => {
+      liff.init({ liffId: "2009626975-Vz6EeQLF" });
+    }
+  </script>
+</body>
+</html>
